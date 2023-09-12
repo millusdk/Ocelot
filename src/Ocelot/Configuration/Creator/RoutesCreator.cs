@@ -26,6 +26,7 @@ namespace Ocelot.Configuration.Creator
         private readonly IRouteKeyCreator _routeKeyCreator;
         private readonly ISecurityOptionsCreator _securityOptionsCreator;
         private readonly IVersionCreator _versionCreator;
+        private readonly IClientCertificateOptionsCreator _clientCertificateOptionsCreator;
 
         public RoutesCreator(
             IClaimsToThingCreator claimsToThingCreator,
@@ -42,7 +43,8 @@ namespace Ocelot.Configuration.Creator
             ILoadBalancerOptionsCreator loadBalancerOptionsCreator,
             IRouteKeyCreator routeKeyCreator,
             ISecurityOptionsCreator securityOptionsCreator,
-            IVersionCreator versionCreator
+            IVersionCreator versionCreator,
+            IClientCertificateOptionsCreator clientCertificateOptionsCreator
             )
         {
             _routeKeyCreator = routeKeyCreator;
@@ -61,6 +63,7 @@ namespace Ocelot.Configuration.Creator
             _loadBalancerOptionsCreator = loadBalancerOptionsCreator;
             _securityOptionsCreator = securityOptionsCreator;
             _versionCreator = versionCreator;
+            _clientCertificateOptionsCreator = clientCertificateOptionsCreator;
         }
 
         public List<Route> Create(FileConfiguration fileConfiguration)
@@ -112,6 +115,9 @@ namespace Ocelot.Configuration.Creator
 
             var downstreamHttpVersion = _versionCreator.Create(fileRoute.DownstreamHttpVersion);
 
+            var clientCertificateOptions = _clientCertificateOptionsCreator.Create(fileRoute
+                .ClientCertificateOptions);
+
             var route = new DownstreamRouteBuilder()
                 .WithKey(fileRoute.Key)
                 .WithDownstreamPathTemplate(fileRoute.DownstreamPathTemplate)
@@ -148,6 +154,7 @@ namespace Ocelot.Configuration.Creator
                 .WithSecurityOptions(securityOptions)
                 .WithDownstreamHttpVersion(downstreamHttpVersion)
                 .WithDownStreamHttpMethod(fileRoute.DownstreamHttpMethod)
+                .WithClientCertificateOptions(clientCertificateOptions)
                 .Build();
 
             return route;

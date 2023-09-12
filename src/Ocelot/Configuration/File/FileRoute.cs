@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿    using System.Collections.Generic;
 
 namespace Ocelot.Configuration.File
 {
@@ -24,6 +24,7 @@ namespace Ocelot.Configuration.File
             LoadBalancerOptions = new FileLoadBalancerOptions();
             SecurityOptions = new FileSecurityOptions();
             Priority = 1;
+            ClientCertificateOptions = new FileClientCertificateOptions();
         }
 
         public string DownstreamPathTemplate { get; set; }
@@ -57,5 +58,6 @@ namespace Ocelot.Configuration.File
         public bool DangerousAcceptAnyServerCertificateValidator { get; set; }
         public FileSecurityOptions SecurityOptions { get; set; }
         public string DownstreamHttpVersion { get; set; }
+        public FileClientCertificateOptions ClientCertificateOptions { get; set; }
     }
 }

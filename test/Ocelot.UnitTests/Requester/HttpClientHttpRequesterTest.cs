@@ -68,6 +68,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(upstreamTemplate)
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             var httpContext = new DefaultHttpContext();
@@ -95,6 +96,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(upstreamTemplate)
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             var httpContext = new DefaultHttpContext();
@@ -121,6 +123,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(upstreamTemplate)
                 .WithQosOptions(new QoSOptionsBuilder().WithTimeoutValue(1).Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             var httpContext = new DefaultHttpContext();

@@ -62,6 +62,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(x => GivenTheFactoryReturns())
@@ -83,6 +84,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(x => GivenARealCache())
@@ -109,6 +111,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(x => GivenARealCache())
@@ -136,6 +139,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithContainsQueryString(true).WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             var routeB = new DownstreamRouteBuilder()
@@ -144,6 +148,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithContainsQueryString(true).WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(x => GivenARealCache())
@@ -172,6 +177,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
                 .WithDangerousAcceptAnyServerCertificateValidator(true)
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(x => GivenTheFactoryReturns())
@@ -194,6 +200,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             var fakeOne = new FakeDelegatingHandler();
@@ -226,6 +233,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(_ => GivenADownstreamService())
@@ -262,6 +270,7 @@ namespace Ocelot.UnitTests.Requester
                 .WithLoadBalancerKey(string.Empty)
                 .WithUpstreamPathTemplate(new UpstreamPathTemplateBuilder().WithOriginalValue(string.Empty).Build())
                 .WithQosOptions(new QoSOptionsBuilder().Build())
+                .WithClientCertificateOptions(new ClientCertificateOptions())
                 .Build();
 
             this.Given(_ => GivenADownstreamService())

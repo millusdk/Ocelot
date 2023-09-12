@@ -32,6 +32,7 @@ namespace Ocelot.UnitTests.Configuration
         private readonly Mock<IRouteKeyCreator> _rrkCreator;
         private readonly Mock<ISecurityOptionsCreator> _soCreator;
         private readonly Mock<IVersionCreator> _versionCreator;
+        private readonly Mock<ClientCertificateOptionsCreator> _clientCertificateOptionsCreator;
         private FileConfiguration _fileConfig;
         private RouteOptions _rro;
         private string _requestId;
@@ -66,6 +67,7 @@ namespace Ocelot.UnitTests.Configuration
             _rrkCreator = new Mock<IRouteKeyCreator>();
             _soCreator = new Mock<ISecurityOptionsCreator>();
             _versionCreator = new Mock<IVersionCreator>();
+            _clientCertificateOptionsCreator = new Mock<ClientCertificateOptionsCreator>();
 
             _creator = new RoutesCreator(
                 _cthCreator.Object,
@@ -82,7 +84,8 @@ namespace Ocelot.UnitTests.Configuration
                 _lboCreator.Object,
                 _rrkCreator.Object,
                 _soCreator.Object,
-                _versionCreator.Object
+                _versionCreator.Object,
+                _clientCertificateOptionsCreator.Object
                 );
         }
 
@@ -151,6 +154,34 @@ namespace Ocelot.UnitTests.Configuration
               .BDDfy();
         }
 
+        [Fact]
+        public void should_return_client_certificate_options()
+        {
+            var fileConfig = new FileConfiguration
+            {
+                Routes = new List<FileRoute>
+                {
+                    new()
+                    {
+                        ServiceName = "dave",
+                        ClientCertificateOptions = new FileClientCertificateOptions
+                        {
+                            Location = "My",
+                            Store = "LocalMachine",
+                            Thumbprint = "aa",
+                        },
+                    },
+                },
+            };
+
+            this.Given(_ => GivenThe(fileConfig))
+                .And(_ => GivenTheDependenciesAreSetUpCorrectly())
+                .When(_ => WhenICreate())
+                .And(_ => ThenTheRouteContainsCertificate())
+                .BDDfy();
+
+        }
+
         private void ThenTheDependenciesAreCalledCorrectly()
         {
             ThenTheDepsAreCalledFor(_fileConfig.Routes[0], _fileConfig.GlobalConfiguration);
@@ -196,6 +227,14 @@ namespace Ocelot.UnitTests.Configuration
 
             ThenTheRouteIsSet(_fileConfig.Routes[0], 0);
             ThenTheRouteIsSet(_fileConfig.Routes[1], 1);
+        }
+
+        private void ThenTheRouteContainsCertificate()
+        {
+            _fileConfig.Routes[0].ClientCertificateOptions.ShouldNotBeNull();
+            _fileConfig.Routes[0].ClientCertificateOptions.Location.ShouldNotBeNull();
+            _fileConfig.Routes[0].ClientCertificateOptions.Store.ShouldNotBeNull();
+            _fileConfig.Routes[0].ClientCertificateOptions.Thumbprint.ShouldNotBeNull();
         }
 
         private void ThenNoRoutesAreReturned()

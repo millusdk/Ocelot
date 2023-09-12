@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-
+using System.Security.Cryptography.X509Certificates;
 using Ocelot.Configuration;
 
 using Ocelot.Logging;
@@ -81,18 +81,38 @@ namespace Ocelot.Requester
 
         private static HttpClientHandler UseNonCookiesHandler(DownstreamRoute downstreamRoute)
         {
-            return new HttpClientHandler
+            var clientHandler = new HttpClientHandler
             {
                 AllowAutoRedirect = downstreamRoute.HttpHandlerOptions.AllowAutoRedirect,
                 UseCookies = downstreamRoute.HttpHandlerOptions.UseCookieContainer,
                 UseProxy = downstreamRoute.HttpHandlerOptions.UseProxy,
                 MaxConnectionsPerServer = downstreamRoute.HttpHandlerOptions.MaxConnectionsPerServer,
             };
+
+            if (string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Store) ||
+                string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Location) ||
+                string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Thumbprint) ||
+                !Enum.TryParse(downstreamRoute.ClientCertificateOptions.Store, out StoreName storeName) ||
+                !Enum.TryParse(downstreamRoute.ClientCertificateOptions.Location, out StoreLocation storeLocation))
+            {
+                return clientHandler;
+            }
+
+            var store = new X509Store(storeName, storeLocation);
+
+            store.Open(OpenFlags.ReadOnly);
+
+            var certificate = store.Certificates.First(cert =>
+                cert.Thumbprint == downstreamRoute.ClientCertificateOptions.Thumbprint);
+
+            clientHandler.ClientCertificates.Add(certificate);
+
+            return clientHandler;
         }
 
         private static HttpClientHandler UseCookiesHandler(DownstreamRoute downstreamRoute)
         {
-            return new HttpClientHandler
+            var clientHandler = new HttpClientHandler
             {
                 AllowAutoRedirect = downstreamRoute.HttpHandlerOptions.AllowAutoRedirect,
                 UseCookies = downstreamRoute.HttpHandlerOptions.UseCookieContainer,
@@ -100,6 +120,26 @@ namespace Ocelot.Requester
                 MaxConnectionsPerServer = downstreamRoute.HttpHandlerOptions.MaxConnectionsPerServer,
                 CookieContainer = new CookieContainer(),
             };
+
+            if (string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Store) ||
+                string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Location) ||
+                string.IsNullOrEmpty(downstreamRoute.ClientCertificateOptions.Thumbprint) ||
+                !Enum.TryParse(downstreamRoute.ClientCertificateOptions.Store, out StoreName storeName) ||
+                !Enum.TryParse(downstreamRoute.ClientCertificateOptions.Location, out StoreLocation storeLocation))
+            {
+                return clientHandler;
+            }
+
+            var store = new X509Store(storeName, storeLocation);
+
+            store.Open(OpenFlags.ReadOnly);
+
+            var certificate = store.Certificates.First(cert =>
+                cert.Thumbprint == downstreamRoute.ClientCertificateOptions.Thumbprint);
+
+            clientHandler.ClientCertificates.Add(certificate);
+
+            return clientHandler;
         }
 
         public void Save()
